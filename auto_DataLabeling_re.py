@@ -28,6 +28,11 @@ if os.path.exists('long_character_anno.txt'):
             pt, _, _ = line.strip().split('|')
             complete_list.append(pt)
 
+inference_pipeline = pipeline(
+    task=Tasks.auto_speech_recognition,
+    model=local_dir_root,
+)
+
 for file in filelist:
     if file[-3:] != 'wav':
         print(f"{file} not supported, ignoring...\n")
@@ -41,10 +46,6 @@ for file in filelist:
         print(f'{file} is already done, skip!')
         continue
 
-    inference_pipeline = pipeline(
-        task=Tasks.auto_speech_recognition,
-        model=local_dir_root,
-    )
     rec_result = inference_pipeline(audio_in=parent_dir + file)
 
     if 'text' not in rec_result:
